@@ -29,7 +29,8 @@ export default new VueRouter({
       path: '/restaurants',
       name: 'restaurants',
       component: Restaurants
-    }, {
+    },
+    {
       path: '/restaurants/feeds',
       name: 'restaurants-feeds',
       component: () => import('../views/RestaurantsFeeds.vue')
@@ -37,7 +38,13 @@ export default new VueRouter({
       path: '/restaurants/top',
       name: 'restaurants-top',
       component: () => import('../views/RestaurantsTop.vue')
-    }, {
+    },
+    {
+      path: '/restaurants/:id',
+      name: 'restaurant',
+      component: () => import('../views/Restaurant.vue')
+    },
+    {
       path: '/users/top',
       name: 'users-top',
       component: () => import('../views/UsersTop.vue')

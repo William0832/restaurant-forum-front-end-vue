@@ -11,13 +11,14 @@
       p {{item.text}}
       | by
       router-link(to="#") {{item.User.name}}
-      | at {{fromNow[index]}}
+      | at {{fromNow(item)}}
       hr
 </template>
 
 <script>
-import moment from 'moment'
+import mixins from '../utils/mixins'
 export default {
+  mixins: [mixins],
   props: {
     comments: {
       type: Array,
@@ -27,9 +28,6 @@ export default {
   computed: {
     existedComment () {
       return this.comments.filter(e => e.Restaurant && e.text)
-    },
-    fromNow () {
-      return this.existedComment.map(e => moment(e.createdAt).fromNow())
     }
   }
 }

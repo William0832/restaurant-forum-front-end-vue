@@ -7,21 +7,17 @@
         router-link(to="#") {{ item.name }}
         small {{ item.Category.name }}
       p {{ item.description }}
-      p {{ fromNows[index]}}
+      p {{ fromNow(item)}}
       hr
 </template>
 <script>
-import moment from 'moment'
+import mixins from '../utils/mixins'
 export default {
+  mixins: [mixins],
   props: {
     restaurants: {
       type: Array,
       require: true
-    }
-  },
-  computed: {
-    fromNows () {
-      return this.restaurants.map(e => moment(e.createdAt).fromNow())
     }
   }
 }
