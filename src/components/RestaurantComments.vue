@@ -9,6 +9,7 @@ div
       button.btn.btn-danger.float-right(
         type="button"
         v-if="currentUser.isAdmin"
+        @click.stop.prevent="deleteCommentHandler(comment.id)"
       ) Delete
       h3
         router-link(to="#") {{comment.User.name}}
@@ -39,6 +40,13 @@ export default {
   data () {
     return {
       currentUser: dummyData.currentUser
+    }
+  },
+  methods: {
+    deleteCommentHandler (commentId) {
+      // console.log('deleteCommentHandler:', commentId)
+      // TODO: delete comment by API
+      this.$emit('after-delete-comment', commentId)
     }
   }
 }

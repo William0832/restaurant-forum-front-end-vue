@@ -2,7 +2,10 @@
 .container.py-5
   h1 餐廳詳細資料
   RestaurantDetail(:initial-restaurant="restaurant")
-  RestaurantComments(:restaurant-comments="restaurantComments")
+  RestaurantComments(
+    :restaurant-comments="restaurantComments"
+    @after-delete-comment="afterDeleteComment"
+  )
   //- CreateComment
 </template>
 
@@ -160,6 +163,9 @@ export default {
       }
 
       this.restaurantComments = dummyData.restaurant.Comments
+    },
+    afterDeleteComment (commentId) {
+      this.restaurantComments = this.restaurantComments.filter(e => e.id !== commentId)
     }
   },
   created () {
