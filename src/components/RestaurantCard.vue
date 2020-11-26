@@ -1,10 +1,12 @@
 <template lang="pug">
 .col-md-6.col-lg-4
   .card.mb-4
-    img(:src="restaurant.image", alt="image of restaurant")
+    router-link(
+      :to="{ name:'restaurant',params:{id: restaurant.id} }"
+    )
+      img.card-img-top(:src="restaurant.image", alt="image of restaurant")
     .card-body
-      p.card-text.title-wrap
-        router-link(to="#") {{restaurant.name}}
+      p.card-title {{restaurant.name}}
       span.badge.badge-secondary {{restaurant.Category.name}}
       p.card-text.text-truncate {{restaurant.description}}
     .card-footer

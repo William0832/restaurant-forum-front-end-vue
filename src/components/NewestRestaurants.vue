@@ -4,7 +4,7 @@
   .card-body
     div(v-for="(item,index) in restaurants")
       h4
-        router-link(to="#") {{ item.name }}
+        router-link(:to="`/restaurants/${item.id}`") {{ item.name }}
         small {{ item.Category.name }}
       p {{ item.description }}
       p {{ fromNow(item)}}

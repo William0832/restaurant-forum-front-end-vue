@@ -7,7 +7,7 @@
       :key= "item.id"
     )
       h4
-        router-link(to="#") {{item.Restaurant.name}}
+        router-link(:to="`/restaurants/${item.Restaurant.id}`") {{item.Restaurant.name}}
       p {{item.text}}
       | by
       router-link(to="#") {{item.User.name}}
