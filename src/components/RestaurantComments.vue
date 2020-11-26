@@ -46,7 +46,10 @@ export default {
     deleteCommentHandler (commentId) {
       // console.log('deleteCommentHandler:', commentId)
       // TODO: delete comment by API
-      this.$emit('after-delete-comment', commentId)
+      const comments = this.restaurantComments.filter(e => e.id !== commentId)
+      // this.$emit('after-delete-comment', commentId)
+
+      this.$emit('update:restaurantComments', comments)
     }
   }
 }

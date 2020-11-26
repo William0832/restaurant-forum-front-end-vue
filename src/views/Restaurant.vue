@@ -3,8 +3,7 @@
   h1 餐廳詳細資料
   RestaurantDetail(:initial-restaurant="restaurant")
   RestaurantComments(
-    :restaurant-comments="restaurantComments"
-    @after-delete-comment="afterDeleteComment"
+    :restaurant-comments.sync="restaurantComments"
   )
   //- CreateComment
 </template>
@@ -163,10 +162,10 @@ export default {
       }
 
       this.restaurantComments = dummyData.restaurant.Comments
-    },
-    afterDeleteComment (commentId) {
-      this.restaurantComments = this.restaurantComments.filter(e => e.id !== commentId)
     }
+    // afterDeleteComment (commentId) {
+    //   this.restaurantComments = this.restaurantComments.filter(e => e.id !== commentId)
+    // }
   },
   created () {
     const { id: restaurantId } = this.$route.params
