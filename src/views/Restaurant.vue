@@ -5,13 +5,16 @@
   RestaurantComments(
     :restaurant-comments.sync="restaurantComments"
   )
-  //- CreateComment
+  CreateComment(
+    :restaurantId="restaurant.id"
+    @after-create-comment="afterCreateComment"
+  )
 </template>
 
 <script>
 import RestaurantDetail from '../components/RestaurantDetail'
 import RestaurantComments from '../components/RestaurantComments'
-// import CreateComment from '../components/CreateComment'
+import CreateComment from '../components/CreateComment'
 const dummyData = {
   restaurant: {
     id: 1,
@@ -127,7 +130,16 @@ const dummyData = {
   isFavorited: false,
   isLiked: false
 }
-
+const dummyUser = {
+  currentUser: {
+    id: 1,
+    name: '管理者',
+    email: 'root@example.com',
+    image: 'https://i.pravatar.cc/300',
+    isAdmin: true
+  },
+  isAuthenticated: true
+}
 export default {
   data () {
     return {
@@ -143,6 +155,7 @@ export default {
         isFavorited: false,
         isLiked: false
       },
+      currentUser: dummyUser.currentUser,
       restaurantComments: []
     }
   },
@@ -162,6 +175,20 @@ export default {
       }
 
       this.restaurantComments = dummyData.restaurant.Comments
+    },
+    afterCreateComment (payload) {
+      // console.log('afterCreateComment', payload)
+      const { commentId, restaurantId, text } = payload
+      this.restaurantComments.push({
+        id: commentId,
+        RestaurantId: restaurantId,
+        User: {
+          id: this.currentUser.id,
+          name: this.currentUser.name
+        },
+        text,
+        createdAt: new Date()
+      })
     }
     // afterDeleteComment (commentId) {
     //   this.restaurantComments = this.restaurantComments.filter(e => e.id !== commentId)
@@ -173,8 +200,8 @@ export default {
   },
   components: {
     RestaurantDetail,
-    RestaurantComments
-  // CreateComment
+    RestaurantComments,
+    CreateComment
   }
 }
 </script>
