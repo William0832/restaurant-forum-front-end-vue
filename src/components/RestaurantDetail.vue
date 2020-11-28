@@ -21,7 +21,7 @@
           |{{restaurant.address}}
   .col-lg-8
     p {{ restaurant.description }}
-    a.btn.btn-primary.btn-border.mr-2(href="#") Dashboard
+    router-link.btn.btn-primary.btn-border.mr-2(:to="`/restaurants/${restaurant.id}/dashboard`") Dashboard
     button.btn.btn-danger.btn-border.mr-2(
       type="button"
       v-if="restaurant.isFavorited"
