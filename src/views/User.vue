@@ -6,9 +6,9 @@
     )
   .row
     .col-md-4
-      UserFollowingsCard
+      UserFollowingsCard(:followings="profile.Followings")
       br
-      UserFollowersCard
+      UserFollowersCard(:followers="profile.Followers")
     .col-md-8
       //- UserCommentsCard
       //- UserFavoritedRestaurantsCard
@@ -1234,5 +1234,4 @@ export default {
 </script>
 
 <style>
-
 </style>
