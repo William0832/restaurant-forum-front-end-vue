@@ -3,6 +3,7 @@
   UserProfileCard(
     :init-profile="profile"
     :currentUser="currentUser"
+    :commentedRestaurants="commentedRestaurants"
     )
   .row
     .col-md-4
@@ -10,16 +11,16 @@
       br
       UserFollowersCard(:followers="profile.Followers")
     .col-md-8
-      //- UserCommentsCard
-      //- UserFavoritedRestaurantsCard
+      UserCommentsCard(:commentedRestaurants="commentedRestaurants")
+      UserFavoritedRestaurantsCard(:favoriteRestaurants="profile.FavoritedRestaurants")
 </template>
 
 <script>
 import UserProfileCard from '../components/UserProfileCard.vue'
 import UserFollowingsCard from '../components/UserFollowingsCard.vue'
 import UserFollowersCard from '../components/UserFollowersCard.vue'
-// import UserCommentsCard from '../components/UserCommentsCard.vue'
-// import UserFavoritedRestaurantsCard from '../components/UserFavoritedRestaurantsCard.vue'
+import UserCommentsCard from '../components/UserCommentsCard.vue'
+import UserFavoritedRestaurantsCard from '../components/UserFavoritedRestaurantsCard.vue'
 
 const dummyData = {
   profile: {
@@ -1209,9 +1210,9 @@ export default {
   components: {
     UserProfileCard,
     UserFollowingsCard,
-    UserFollowersCard
-    // UserCommentsCard,
-    // UserFavoritedRestaurantsCard
+    UserFollowersCard,
+    UserCommentsCard,
+    UserFavoritedRestaurantsCard
   },
   data () {
     return {
@@ -1225,6 +1226,15 @@ export default {
       this.profile = dummyData.profile
       this.isFollowed = dummyData.isFollowed
       this.currentUser = dummyUser.currentUser
+    }
+  },
+  computed: {
+    commentedRestaurants () {
+      const result = new Map()
+      this.profile.Comments.forEach(e => {
+        result.set(e.Restaurant.id, e.Restaurant)
+      })
+      return Array.from(result.values())
     }
   },
   created () {

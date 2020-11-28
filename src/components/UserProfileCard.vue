@@ -13,7 +13,7 @@
         p.card-text {{profile.email}}
         ul.list-unstyled.list-inline
           li
-            strong {{commendRestaurantsAmount}}
+            strong {{commentedRestaurants.length}}
             |  已評論餐廳
           li
             strong {{profile.FavoritedRestaurants.length}}
@@ -50,6 +50,10 @@ export default {
     currentUser: {
       type: Object,
       require: true
+    },
+    commentedRestaurants: {
+      type: Array,
+      required: true
     }
   },
   data () {
@@ -58,13 +62,13 @@ export default {
     }
   },
   computed: {
-    commendRestaurantsAmount () {
-      const result = new Set()
-      this.profile.Comments.forEach(e => {
-        result.add(e.Restaurant.id)
-      })
-      return result.size
-    },
+    // commendRestaurantsAmount () {
+    //   const result = new Set()
+    //   this.profile.Comments.forEach(e => {
+    //     result.add(e.Restaurant.id)
+    //   })
+    //   return result.size
+    // },
     isFollower () {
       return this.profile.Followers.map(e => e.id).includes(this.currentUser.id)
     }
