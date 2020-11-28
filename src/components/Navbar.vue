@@ -12,7 +12,9 @@ nav.navbar.navbar-expand-lg.fixed-top.navbar-dark.bg-dark
     span.navbar-toggler-icon
   #navbarSupportedContent.navbar-collapse.collapse
     .ml-auto.d-flex.align-items-center
-      router-link.text-white.mr-3(to='#', v-if='currentUser.isAdmin') 管理員後台
+      router-link.text-white.mr-3(
+        :to="{ name: 'admin-restaurants' }"
+        v-if='currentUser.isAdmin') 管理員後台
       template(v-if='isAuthenticated')
         router-link.text-white.mr-3(to='#') {{ currentUser.name || "使用者" }}您好
         button.btn.btn-sm.btn-outline-success.my-2.my-sm-0(type='button') 登出

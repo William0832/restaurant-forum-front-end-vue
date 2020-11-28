@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import mixins from '../utils/mixins'
+import { fromNow } from '../utils/mixins'
 export default {
-  mixins: [mixins],
+  mixins: [fromNow],
   props: {
     comments: {
       type: Array,

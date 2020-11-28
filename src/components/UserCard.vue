@@ -3,7 +3,7 @@
   .card
     router-link(to="#")
       img.card-img-top(
-        :src="user.image"
+        :src="emptyImage(user.image)"
         :alt="`image of ${user.name}`")
     .card-body
       h5.card-title {{user.name}}
@@ -20,7 +20,9 @@
 
 </template>
 <script>
+import { emptyImage } from '../utils/mixins'
 export default {
+  mixins: [emptyImage],
   props: {
     initialUser: {
       type: Object,

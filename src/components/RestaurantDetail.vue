@@ -5,7 +5,7 @@
     p.badge.badge-secondary.mt-1.mb-3 {{restaurant.categoryName}}
   .col-lg-4
     img(
-      :src="restaurant.image"
+      :src="emptyImage(restaurant.image)"
       :alt="`image of ${restaurant.name}`"
     )
     .contact-info-wrap
@@ -45,7 +45,9 @@
 </template>
 
 <script>
+import { emptyImage } from '../utils/mixins'
 export default {
+  mixins: [emptyImage],
   props: {
     initialRestaurant: {
       type: Object,

@@ -5,7 +5,7 @@
       img(
         width="300"
         height="300"
-        :src="profile.image"
+        :src="emptyImage(profile.image)"
         alt="img")
     .col-md-8
       .card-body
@@ -41,7 +41,9 @@
 </template>
 
 <script>
+import { emptyImage } from '../utils/mixins'
 export default {
+  mixins: [emptyImage],
   props: {
     initProfile: {
       type: Object,

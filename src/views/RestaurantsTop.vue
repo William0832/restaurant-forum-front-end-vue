@@ -10,7 +10,7 @@
       .row.no-gutters
         .col-md-4
           a(href="#")
-            img.card-img(:src="item.image")
+            img.card-img(:src="emptyImage(item.image)")
         .col-md-8
           .card-body
             h5.card-title {{item.name}}

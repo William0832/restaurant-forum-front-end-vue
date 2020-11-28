@@ -12,12 +12,14 @@
       img(
         width="60"
         height="60"
-        :src="item.image"
+        :src="emptyImage(item.image)"
         alt="img of restaurant")
 </template>
 
 <script>
+import { emptyImage } from '../utils/mixins'
 export default {
+  mixins: [emptyImage],
   props: {
     commentedRestaurants: {
       type: Array,

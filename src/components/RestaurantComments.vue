@@ -19,7 +19,7 @@ div
 </template>
 
 <script>
-import mixins from '../utils/mixins'
+import { fromNow } from '../utils/mixins'
 const dummyData = {
   currentUser: {
     id: 1,
@@ -30,7 +30,7 @@ const dummyData = {
   isAuthenticated: true
 }
 export default {
-  mixins: [mixins],
+  mixins: [fromNow],
   props: {
     restaurantComments: {
       type: Array,

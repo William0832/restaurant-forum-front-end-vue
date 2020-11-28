@@ -4,7 +4,10 @@
     router-link(
       :to="{ name:'restaurant',params:{id: restaurant.id} }"
     )
-      img.card-img-top(:src="restaurant.image", alt="image of restaurant")
+      img.card-img-top(
+        :src="emptyImage(restaurant.image)"
+        alt="image of restaurant"
+      )
     .card-body
       p.card-title {{restaurant.name}}
       span.badge.badge-secondary {{restaurant.Category.name}}
@@ -34,7 +37,9 @@
 </template>
 
 <script>
+import { emptyImage } from '../utils/mixins'
 export default {
+  mixins: [emptyImage],
   props: {
     initialRestaurant: {
       type: Object,
