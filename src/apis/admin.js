@@ -24,5 +24,13 @@ export default {
       return apiHelper.put(`/admin/restaurants/${restaurantId}`, formData, authorizedObj)
     }
 
+  },
+  users: {
+    get () {
+      return apiHelper.get('/admin/users', authorizedObj)
+    }
+    // updateRole ({ userId }) {
+    //   return apiHelper.put(`/admin/users/${userId}`, authorizedObj)
+    // }
   }
 }

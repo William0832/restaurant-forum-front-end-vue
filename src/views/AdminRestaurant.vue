@@ -49,6 +49,12 @@ export default {
       }
     }
   },
+  beforeRouteUpdate (to, from, next) {
+    const { id } = to.params
+    console.log(id)
+    this.fetchRestaurant(id)
+    next()
+  },
   methods: {
     async fetchRestaurant (restaurantId) {
       try {

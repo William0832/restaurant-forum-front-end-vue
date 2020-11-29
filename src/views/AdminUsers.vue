@@ -29,51 +29,8 @@
 
 <script>
 import AdminNav from '../components/AdminNav'
-const dummyData = {
-  users: [
-    {
-      id: 1,
-      name: 'root',
-      email: 'root@example.com',
-      password: '$2a$10$0dBI.8S//NhlGeouBUbV3.oBDkdbbqXObuMJyuS.PHxjzdW/PvqYy',
-      isAdmin: true,
-      image: null,
-      createdAt: '2020-11-23T10:08:45.000Z',
-      updatedAt: '2020-11-23T10:08:45.000Z'
-    },
-    {
-      id: 2,
-      name: 'user1',
-      email: 'user1@example.com',
-      password: '$2a$10$s7ShjXk/VR4nVoFtm9PLG.LR6x7wv77vwouGXoKssT7Xfk/rOsQZe',
-      isAdmin: false,
-      image: null,
-      createdAt: '2020-11-23T10:08:45.000Z',
-      updatedAt: '2020-11-23T10:08:45.000Z'
-    },
-    {
-      id: 3,
-      name: 'user2',
-      email: 'user2@example.com',
-      password: '$2a$10$TPKFC8BS5/E37CFM3kx8yOPya6L5ifI0S8aFQ7b3jdA.oEzjXwYby',
-      isAdmin: false,
-      image: null,
-      createdAt: '2020-11-23T10:08:45.000Z',
-      updatedAt: '2020-11-23T10:08:45.000Z'
-    },
-    {
-      id: 902,
-      name: 'Serena',
-      email: 'serena@gmail.com',
-      password: '$2a$10$qh4WPjAiZsOxg2sCF2KEP.4P7p9kS6vAeTujIr3cZXfE3vaWVqUMO',
-      isAdmin: false,
-      image: null,
-      createdAt: '2020-11-23T10:13:44.000Z',
-      updatedAt: '2020-11-23T10:13:44.000Z'
-    }
-  ]
-}
-
+import { Toast } from '../utils/helpers.js'
+import adminAPI from '../apis/admin'
 export default {
   components: { AdminNav },
   data () {
@@ -82,12 +39,32 @@ export default {
     }
   },
   methods: {
-    fetchUsers () {
-      this.users = dummyData.users
+    async fetchUsers () {
+      try {
+        const { data } = await adminAPI.users.get()
+        this.users = data.users
+      } catch (err) {
+        console.error(err)
+        Toast.fire({
+          icon: 'error',
+          title: '無法取得使用者的資料，請稍後再試'
+        })
+      }
+      // this.users = dummyData.users
     },
-    toggleRole (userId) {
-      const target = this.users.find(e => e.id === userId)
-      target.isAdmin = !target.isAdmin
+    async toggleRole (userId) {
+      try {
+        // const { data } = await adminAPI.users.updateRole({ userId })
+        // if (data.status !== 'success') throw new Error(data.message)
+        const target = this.users.find(e => e.id === userId)
+        target.isAdmin = !target.isAdmin
+      } catch (err) {
+        console.error(err)
+        Toast.fire({
+          icon: 'error',
+          title: '無法更新使用者權限，請稍後再試'
+        })
+      }
     }
   },
   created () {
