@@ -14,9 +14,14 @@ table.table
       td.d-flex.justify-content-between
         router-link.btn.btn-link(
           :to="{ name:'admin-restaurant', params:{ id: restaurant.id } }"
-          ) Show
-        router-link.btn.btn-link(to="#") Edit
-        button.btn.btn-link(type="button") Delete
+        ) Show
+        router-link.btn.btn-link(
+          :to="`/admin/restaurants/${restaurant.id}/edit`"
+        ) Edit
+        button.btn.btn-link(
+          type="button"
+          @click.stop.prevent="deleteRestaurant(restaurant.id)"
+        ) Delete
 </template>
 
 <script>
@@ -983,6 +988,10 @@ export default {
   methods: {
     fetchRestaurants () {
       this.restaurants = dummyData.restaurants
+    },
+    deleteRestaurant (restaurantId) {
+      // TODO: call API to Delete
+      this.restaurants = this.restaurants.filter(e => e.id !== restaurantId)
     }
   },
   created () {

@@ -1,7 +1,9 @@
 <template lang="pug">
 .container.py-5
   AdminNav
-  router-link(to="#").btn.btn-primary.mb-4 New Restaurant
+  router-link(
+    :to="{name: 'admin-restaurant-new'}"
+  ).btn.btn-primary.mb-4 New Restaurant
   AdminRestaurantsTable
 </template>
 

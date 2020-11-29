@@ -24,9 +24,10 @@
           li
             strong {{profile.Followers.length}}
             |  followers (追隨者)
-        button.btn.btn-info(
+        router-link.btn.btn-info(
           type="button"
           v-if="currentUser.id === profile.id"
+          :to="`/users/${profile.id}/edit`"
         ) edit
         .btns(v-else)
           button.btn.btn-danger(

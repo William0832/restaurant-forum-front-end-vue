@@ -31,6 +31,7 @@
 
 <script>
 import NavTabs from '../components/NavTabs.vue'
+import { emptyImage } from '../utils/mixins'
 const dummyData = {
   restaurants: [
     {
@@ -414,6 +415,7 @@ const dummyData = {
   ]
 }
 export default {
+  mixins: [emptyImage],
   data () {
     return {
       restaurants: []
