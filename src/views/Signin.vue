@@ -24,7 +24,10 @@
         autocomplete='current-password',
         required
       )
-    button.btn.btn-lg.btn-primary.btn-block.mb-3(type='submit') Submit
+    button.btn.btn-lg.btn-primary.btn-block.mb-3(
+      :disabled="isProcessing"
+      type='submit'
+    ) Submit
     .text-center.mb-3
       p
         router-link(to="/signup") sign up
@@ -32,20 +35,44 @@
 </template>
 
 <script>
+import authorizationAPI from '../apis/authorization'
+import { Toast } from '../utils/helpers'
 export default {
   data () {
     return {
+      isProcessing: false,
       email: '',
       password: ''
     }
   },
   methods: {
-    submitHandler () {
-      const data = JSON.stringify({
-        email: this.email,
-        password: this.password
-      })
-      console.log(data)
+    async submitHandler () {
+      if (!this.email || !this.password) {
+        Toast.fire({
+          icon: 'warning',
+          title: '請輸入完整 email or password'
+        })
+        return
+      }
+      this.isProcessing = true
+      try {
+        const res = await authorizationAPI.signIn({
+          email: this.email,
+          password: this.password
+        })
+        const { data } = res
+        if (data.status === 'error') throw new Error(data.message)
+        localStorage.setItem('token', data.token)
+        this.$router.push('/restaurants')
+      } catch (err) {
+        console.log(err)
+        this.password = ''
+        Toast.fire({
+          icon: 'warning',
+          title: '輸入帳號 or 密碼有誤'
+        })
+        this.isProcessing = false
+      }
     }
   }
 }
