@@ -1,5 +1,8 @@
 <template lang="pug">
-  form(@submit.stop.prevent="submitHandler")
+  form(
+    v-show="!isLoading"
+    @submit.stop.prevent="submitHandler"
+    )
     .form-group
       label(for="name") Name
       input.form-control(
@@ -60,7 +63,6 @@
       )
     .form-group
       label(for="image") Image
-      //- TODO:
       img.d-block.img-thumbnail.mb-3(
         v-if="restaurant.image"
         :src="restaurant.image"
@@ -73,39 +75,15 @@
         accept="image/*"
         @change="fileChangeHandler"
       )
-    button.btn.btn-primary(type="submit") 送出
+    button.btn.btn-primary(
+      :disabled="isProcessing"
+      type="submit"
+    ) {{ isProcessing ? '處理中' : '送出' }}
 </template>
 <script>
 import { fileChangeHandler } from '../utils/mixins'
-const dummyData = {
-  categories: [
-    {
-      id: 1,
-      name: '中式料理',
-      createdAt: '2019-06-22T09:00:43.000Z',
-      updatedAt: '2019-06-22T09:00:43.000Z'
-    },
-    {
-      id: 2,
-      name: '日本料理',
-      createdAt: '2019-06-22T09:00:43.000Z',
-      updatedAt: '2019-06-22T09:00:43.000Z'
-    },
-    {
-      id: 3,
-      name: '義大利料理',
-      createdAt: '2019-06-22T09:00:43.000Z',
-      updatedAt: '2019-06-22T09:00:43.000Z'
-    },
-    {
-      id: 4,
-      name: '墨西哥料理',
-      createdAt: '2019-06-22T09:00:43.000Z',
-      updatedAt: '2019-06-22T09:00:43.000Z'
-    }
-  ]
-}
-
+import adminAPI from '../apis/admin'
+import { Toast } from '../utils/helpers'
 export default {
   mixins: [fileChangeHandler],
   props: {
@@ -120,6 +98,10 @@ export default {
         image: '',
         openingHours: ''
       })
+    },
+    isProcessing: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -127,17 +109,51 @@ export default {
       restaurant: {
         ...this.initialRestaurant
       },
-      categories: []
+      categories: [],
+      isLoading: true
     }
   },
   created () {
     this.fetchCategories()
   },
+  watch: {
+    initialRestaurant (nv) {
+      this.restaurant = {
+        ...this.restaurant,
+        ...nv
+      }
+    }
+  },
   methods: {
-    fetchCategories () {
-      this.categories = dummyData.categories
+    async fetchCategories () {
+      try {
+        const { data } = await adminAPI.categories.get()
+        this.categories = data.categories
+        this.isLoading = false
+      } catch (err) {
+        console.error(err)
+        Toast.fire({
+          icon: 'error',
+          title: '舞法取得類別，請稍後再試'
+        })
+      }
+      // this.categories = dummyData.categories
     },
     submitHandler (e) {
+      if (!this.restaurant.name) {
+        Toast.fire({
+          icon: 'warning',
+          title: '請選擇餐廳名稱'
+        })
+        return
+      }
+      if (!this.restaurant.categoryId) {
+        Toast.fire({
+          icon: 'warning',
+          title: '請選擇餐廳類別'
+        })
+        return
+      }
       const form = e.target
       const formData = new FormData(form)
       console.log('submitHandler', formData)
