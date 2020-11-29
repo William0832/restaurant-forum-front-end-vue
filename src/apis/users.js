@@ -1,18 +1,18 @@
 import { apiHelper } from './../utils/helpers'
 const getToken = () => localStorage.getItem('token')
-
+const authorizedObj = { headers: { Authorization: `Bearer ${getToken()}` } }
 export default {
   addFavorite ({ restaurantId }) {
     return apiHelper.post(
       `/favorite/${restaurantId}`,
       null,
-      { headers: { Authorization: `Bearer ${getToken()}` } }
+      authorizedObj
     )
   },
   deleteFavorite ({ restaurantId }) {
     return apiHelper.delete(
       `/favorite/${restaurantId}`,
-      { headers: { Authorization: `Bearer ${getToken()}` } }
+      authorizedObj
 
     )
   },
@@ -20,13 +20,32 @@ export default {
     return apiHelper.post(
       `/like/${restaurantId}`,
       null,
-      { headers: { Authorization: `Bearer ${getToken()}` } }
+      authorizedObj
     )
   },
   deleteLike ({ restaurantId }) {
     return apiHelper.delete(
       `/like/${restaurantId}`,
-      { headers: { Authorization: `Bearer ${getToken()}` } }
+      authorizedObj
+    )
+  },
+  getTopUsers () {
+    return apiHelper.get(
+      '/users/top',
+      authorizedObj
+    )
+  },
+  addFollowing ({ userId }) {
+    return apiHelper.post(
+      `/following/${userId}`,
+      null,
+      authorizedObj
+    )
+  },
+  deleteFollowing ({ userId }) {
+    return apiHelper.delete(
+      `/following/${userId}`,
+      authorizedObj
     )
   }
 }
