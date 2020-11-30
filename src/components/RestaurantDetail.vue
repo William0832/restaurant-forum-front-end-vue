@@ -46,6 +46,8 @@
 
 <script>
 import { emptyImage } from '../utils/mixins'
+import usersAPI from '../apis/users'
+import { Toast } from '../utils/helpers'
 export default {
   mixins: [emptyImage],
   props: {
@@ -61,6 +63,7 @@ export default {
   },
   watch: {
     initialRestaurant (nv) {
+      console.log('isFavorited:', nv.isFavorited)
       this.restaurant = {
         ...this.restaurant,
         ...nv
@@ -68,11 +71,41 @@ export default {
     }
   },
   methods: {
-    toggleFavorite () {
-      this.restaurant.isFavorited = !this.restaurant.isFavorited
+    async toggleFavorite () {
+      try {
+        const restaurantId = this.restaurant.id
+        // call API
+        const { data } = this.restaurant.isFavorited
+          ? await usersAPI.deleteFavorite({ restaurantId })
+          : await usersAPI.addFavorite({ restaurantId })
+        if (data.status === 'error') throw new Error(data.message)
+        // 畫面更新
+        this.restaurant.isFavorited = !this.restaurant.isFavorited
+      } catch (err) {
+        console.error(err)
+        Toast.fire({
+          icon: 'error',
+          title: '無法更新我的最最愛，請稍後再試'
+        })
+      }
     },
-    toggleLik () {
-      this.restaurant.isLiked = !this.restaurant.isLiked
+    async toggleLik () {
+      try {
+        const restaurantId = this.restaurant.id
+        // call API
+        const { data } = this.restaurant.isLiked
+          ? await usersAPI.deleteLike({ restaurantId })
+          : await usersAPI.addLike({ restaurantId })
+        if (data.status === 'error') throw new Error(data.message)
+        // 畫面更新
+        this.restaurant.isLiked = !this.restaurant.isLiked
+      } catch (err) {
+        console.error(err)
+        Toast.fire({
+          icon: 'error',
+          title: '無法更新 Like，請稍後再試'
+        })
+      }
     }
   }
 }
