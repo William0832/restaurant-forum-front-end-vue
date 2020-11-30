@@ -59,6 +59,14 @@ export default {
       restaurant: this.initialRestaurant
     }
   },
+  watch: {
+    initialRestaurant (nv) {
+      this.restaurant = {
+        ...this.restaurant,
+        ...nv
+      }
+    }
+  },
   methods: {
     toggleFavorite () {
       this.restaurant.isFavorited = !this.restaurant.isFavorited

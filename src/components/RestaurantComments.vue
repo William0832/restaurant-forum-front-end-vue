@@ -20,15 +20,10 @@ div
 
 <script>
 import { fromNow } from '../utils/mixins'
-const dummyData = {
-  currentUser: {
-    id: 1,
-    name: 'root',
-    email: 'root@example.com',
-    isAdmin: true
-  },
-  isAuthenticated: true
-}
+import { mapState } from 'vuex'
+import restaurantAPI from '../apis/restaurants'
+import { Toast } from '../utils/helpers'
+
 export default {
   mixins: [fromNow],
   props: {
@@ -37,19 +32,23 @@ export default {
       require: true
     }
   },
-  data () {
-    return {
-      currentUser: dummyData.currentUser
-    }
+  computed: {
+    ...mapState(['currentUser'])
   },
   methods: {
-    deleteCommentHandler (commentId) {
-      // console.log('deleteCommentHandler:', commentId)
-      // TODO: delete comment by API
-      const comments = this.restaurantComments.filter(e => e.id !== commentId)
-      // this.$emit('after-delete-comment', commentId)
-
-      this.$emit('update:restaurantComments', comments)
+    async deleteCommentHandler (commentId) {
+      try {
+        const { data } = await restaurantAPI.comments.delete(commentId)
+        if (data.status === 'error') throw new Error(data.message)
+        const comments = this.restaurantComments.filter(e => e.id !== commentId)
+        this.$emit('update:restaurantComments', comments)
+      } catch (err) {
+        console.error(err)
+        Toast.fire({
+          icon: 'error',
+          title: '無法刪除評論，請稍後再試'
+        })
+      }
     }
   }
 }

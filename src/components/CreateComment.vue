@@ -9,11 +9,15 @@ form(@submit.stop.prevent="submitHandler")
     )
     .d-flex.align-items-center.justify-content-between
       button.btn.btn-link(type="button", @click="$router.back()") 回上一頁
-      button.btn.btn-primary.mr-0(type="submit") Submit
+      button.btn.btn-primary.mr-0(
+        :disabled="isProcessing"
+        type="submit"
+      ) Submit
 </template>
 
 <script>
-import { v4 as uuid } from 'uuid'
+import restaurantsAPI from './../apis/restaurants'
+import { Toast } from './../utils/helpers'
 export default {
   props: {
     restaurantId: {
@@ -23,21 +27,39 @@ export default {
   },
   data () {
     return {
+      isProcessing: false,
       text: ''
     }
   },
   methods: {
-    submitHandler () {
-      // TODO: post new comment by API
-      // this.$emit('after-create-comment', comment)
-      const payload = {
-        commentId: uuid(), // temp id
-        restaurantId: this.restaurantId,
-        text: this.text
+    async submitHandler () {
+      try {
+        if (!this.text) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請填寫評價'
+          })
+          return
+        }
+        this.isProcessing = true
+        const { data } = await restaurantsAPI.comments.create(this.text, this.restaurantId)
+        if (data.status === 'error') throw new Error(data.message)
+        const payload = {
+          commentId: data.commentId,
+          restaurantId: this.restaurantId,
+          text: this.text
+        }
+        this.$emit('after-create-comment', payload)
+        this.text = ''
+        this.isProcessing = false
+      } catch (err) {
+        this.isProcessing = false
+        console.error(err)
+        Toast.fire({
+          icon: 'error',
+          title: '無法新增評論，請稍後再試'
+        })
       }
-      // console.log(payload)
-      this.$emit('after-create-comment', payload)
-      this.text = '' // 將表單內的資料清空
     }
   }
 }
