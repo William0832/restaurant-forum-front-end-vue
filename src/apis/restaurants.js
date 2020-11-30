@@ -3,6 +3,9 @@ const getToken = () => localStorage.getItem('token')
 const authorized = () => ({ headers: { Authorization: `Bearer ${getToken()}` } })
 
 export default {
+  getDashboard ({ restaurantId }) {
+    return apiHelper.get(`/restaurants/${restaurantId}/dashboard`, authorized())
+  },
   getRestaurant ({ restaurantId }) {
     return apiHelper.get(`/restaurants/${restaurantId}`, authorized())
   },
