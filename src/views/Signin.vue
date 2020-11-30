@@ -61,8 +61,12 @@ export default {
           password: this.password
         })
         const { data } = res
-        if (data.status === 'error') throw new Error(data.message)
+        if (data.status !== 'success') throw new Error(data.message)
+
         localStorage.setItem('token', data.token)
+
+        this.$store.commit('setCurrentUser', data.user)
+
         this.$router.push('/restaurants')
       } catch (err) {
         console.log(err)

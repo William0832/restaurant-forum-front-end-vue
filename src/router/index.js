@@ -3,10 +3,10 @@ import VueRouter from 'vue-router'
 import NoFound from '../views/NotFound.vue'
 import Signin from '../views/Signin.vue'
 import Restaurants from '../views/Restaurants.vue'
+import store from '../store/index'
 
 Vue.use(VueRouter)
-
-export default new VueRouter({
+const router = new VueRouter({
   mode: 'hash',
   linkExactActiveClass: 'active',
   base: process.env.BASE_URL,
@@ -105,3 +105,8 @@ export default new VueRouter({
     }
   ]
 })
+router.beforeEach((to, from, next) => {
+  store.dispatch('fetchCurrentUser')
+  next()
+})
+export default router

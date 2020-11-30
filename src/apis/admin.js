@@ -1,45 +1,45 @@
 import { apiHelper } from './../utils/helpers'
 const getToken = () => localStorage.getItem('token')
-const authorizedObj = { headers: { Authorization: `Bearer ${getToken()}` } }
+const authorized = () => ({ headers: { Authorization: `Bearer ${getToken()}` } })
 export default {
   categories: {
     get () {
-      return apiHelper.get('/admin/categories', authorizedObj)
+      return apiHelper.get('/admin/categories', authorized())
     },
     create (categoryName) {
-      return apiHelper.post('/admin/categories', { name: categoryName }, authorizedObj)
+      return apiHelper.post('/admin/categories', { name: categoryName }, authorized())
     },
     delete (categoryId) {
-      return apiHelper.delete(`/admin/categories/${categoryId}`, authorizedObj)
+      return apiHelper.delete(`/admin/categories/${categoryId}`, authorized())
     },
     update (categoryId, name) {
-      return apiHelper.put(`/admin/categories/${categoryId}`, { name }, authorizedObj)
+      return apiHelper.put(`/admin/categories/${categoryId}`, { name }, authorized())
     }
   },
   restaurants: {
     getDetail ({ restaurantId }) {
-      return apiHelper.get(`/admin/restaurants/${restaurantId}`, authorizedObj)
+      return apiHelper.get(`/admin/restaurants/${restaurantId}`, authorized())
     },
     create ({ formData }) {
-      return apiHelper.post('/admin/restaurants', formData, authorizedObj)
+      return apiHelper.post('/admin/restaurants', formData, authorized())
     },
     get () {
-      return apiHelper.get('/admin/restaurants', authorizedObj)
+      return apiHelper.get('/admin/restaurants', authorized())
     },
     delete ({ restaurantId }) {
-      return apiHelper.delete(`/admin/restaurants/${restaurantId}`, authorizedObj)
+      return apiHelper.delete(`/admin/restaurants/${restaurantId}`, authorized())
     },
     update ({ restaurantId, formData }) {
-      return apiHelper.put(`/admin/restaurants/${restaurantId}`, formData, authorizedObj)
+      return apiHelper.put(`/admin/restaurants/${restaurantId}`, formData, authorized())
     }
 
   },
   users: {
     get () {
-      return apiHelper.get('/admin/users', authorizedObj)
+      return apiHelper.get('/admin/users', authorized())
     }
     // updateRole ({ userId }) {
-    //   return apiHelper.put(`/admin/users/${userId}`, authorizedObj)
+    //   return apiHelper.put(`/admin/users/${userId}`, authorized())
     // }
   }
 }
