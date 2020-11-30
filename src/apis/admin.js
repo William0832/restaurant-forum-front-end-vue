@@ -5,6 +5,15 @@ export default {
   categories: {
     get () {
       return apiHelper.get('/admin/categories', authorizedObj)
+    },
+    create (categoryName) {
+      return apiHelper.post('/admin/categories', { name: categoryName }, authorizedObj)
+    },
+    delete (categoryId) {
+      return apiHelper.delete(`/admin/categories/${categoryId}`, authorizedObj)
+    },
+    update (categoryId, name) {
+      return apiHelper.put(`/admin/categories/${categoryId}`, { name }, authorizedObj)
     }
   },
   restaurants: {
