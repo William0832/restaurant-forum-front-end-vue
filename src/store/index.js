@@ -12,9 +12,9 @@ export default new Vuex.Store({
       email: '',
       image: '',
       isAdmin: false
-
     },
-    isAuthenticated: false
+    isAuthenticated: false,
+    token: ''
   },
   // use commit call mutations
   mutations: {
@@ -24,10 +24,12 @@ export default new Vuex.Store({
         ...currentUser
       }
       state.isAuthenticated = true
+      state.token = localStorage.getItem('token')
     },
     revokeAuthentication (state) {
       state.currentUser = {}
       state.isAuthenticated = false
+      state.token = ''
       localStorage.removeItem('token')
     }
   },
@@ -42,10 +44,10 @@ export default new Vuex.Store({
         return true
       } catch (err) {
         console.error(err)
+        this.commit('revokeAuthentication')
         return false
       }
     }
-
   },
   modules: {
   }
