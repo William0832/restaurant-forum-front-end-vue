@@ -1,45 +1,43 @@
 import { apiHelper } from './../utils/helpers'
-const getToken = () => localStorage.getItem('token')
-const authorized = () => ({ headers: { Authorization: `Bearer ${getToken()}` } })
 export default {
   categories: {
     get () {
-      return apiHelper.get('/admin/categories', authorized())
+      return apiHelper.get('/admin/categories')
     },
     create (categoryName) {
-      return apiHelper.post('/admin/categories', { name: categoryName }, authorized())
+      return apiHelper.post('/admin/categories', { name: categoryName })
     },
     delete (categoryId) {
-      return apiHelper.delete(`/admin/categories/${categoryId}`, authorized())
+      return apiHelper.delete(`/admin/categories/${categoryId}`)
     },
     update (categoryId, name) {
-      return apiHelper.put(`/admin/categories/${categoryId}`, { name }, authorized())
+      return apiHelper.put(`/admin/categories/${categoryId}`, { name })
     }
   },
   restaurants: {
     getDetail ({ restaurantId }) {
-      return apiHelper.get(`/admin/restaurants/${restaurantId}`, authorized())
+      return apiHelper.get(`/admin/restaurants/${restaurantId}`)
     },
     create ({ formData }) {
-      return apiHelper.post('/admin/restaurants', formData, authorized())
+      return apiHelper.post('/admin/restaurants', formData)
     },
     get () {
-      return apiHelper.get('/admin/restaurants', authorized())
+      return apiHelper.get('/admin/restaurants')
     },
     delete ({ restaurantId }) {
-      return apiHelper.delete(`/admin/restaurants/${restaurantId}`, authorized())
+      return apiHelper.delete(`/admin/restaurants/${restaurantId}`)
     },
     update ({ restaurantId, formData }) {
-      return apiHelper.put(`/admin/restaurants/${restaurantId}`, formData, authorized())
+      return apiHelper.put(`/admin/restaurants/${restaurantId}`, formData)
     }
 
   },
   users: {
     get () {
-      return apiHelper.get('/admin/users', authorized())
+      return apiHelper.get('/admin/users')
     },
     updateRole ({ userId, payload }) {
-      return apiHelper.put(`/admin/users/${userId}`, payload, authorized())
+      return apiHelper.put(`/admin/users/${userId}`, payload)
     }
   }
 }
