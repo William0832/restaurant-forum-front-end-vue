@@ -22,6 +22,7 @@
           button.btn.btn-link(
             @click="toggleRole(user.id)"
             type="button"
+            :disabled="user.id === currentUser.id"
           )
             span(v-show="user.isAdmin") Set as user
             span(v-show="!user.isAdmin") Set as admin
@@ -31,12 +32,16 @@
 import AdminNav from '../components/AdminNav'
 import { Toast } from '../utils/helpers.js'
 import adminAPI from '../apis/admin'
+import { mapState } from 'vuex'
 export default {
   components: { AdminNav },
   data () {
     return {
       users: []
     }
+  },
+  computed: {
+    ...mapState(['currentUser'])
   },
   methods: {
     async fetchUsers () {
@@ -50,13 +55,13 @@ export default {
           title: '無法取得使用者的資料，請稍後再試'
         })
       }
-      // this.users = dummyData.users
     },
     async toggleRole (userId) {
       try {
-        // const { data } = await adminAPI.users.updateRole({ userId })
-        // if (data.status !== 'success') throw new Error(data.message)
         const target = this.users.find(e => e.id === userId)
+        const payload = { isAdmin: (!target.isAdmin).toString() } // API 有點雷 boolean 還要轉字串
+        const { data } = await adminAPI.users.updateRole({ userId, payload })
+        if (data.status !== 'success') throw new Error(data.message)
         target.isAdmin = !target.isAdmin
       } catch (err) {
         console.error(err)

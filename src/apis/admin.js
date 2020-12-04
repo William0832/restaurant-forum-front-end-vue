@@ -37,9 +37,9 @@ export default {
   users: {
     get () {
       return apiHelper.get('/admin/users', authorized())
+    },
+    updateRole ({ userId, payload }) {
+      return apiHelper.put(`/admin/users/${userId}`, payload, authorized())
     }
-    // updateRole ({ userId }) {
-    //   return apiHelper.put(`/admin/users/${userId}`, authorized())
-    // }
   }
 }
