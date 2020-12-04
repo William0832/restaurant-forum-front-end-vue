@@ -9,6 +9,9 @@ export default {
   get ({ userId }) {
     return apiHelper.get(`/users/${userId}`, authorized())
   },
+  put ({ userId, payload }) {
+    return apiHelper.put(`/users/${userId}`, payload, authorized())
+  },
   addFavorite ({ restaurantId }) {
     return apiHelper.post(
       `/favorite/${restaurantId}`,
