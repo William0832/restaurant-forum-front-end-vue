@@ -39,8 +39,10 @@ export default new Vuex.Store({
         if (statusText !== 'OK') throw new Error(data)
         // call mutation event
         this.commit('setCurrentUser', data)
+        return true
       } catch (err) {
         console.error(err)
+        return false
       }
     }
 

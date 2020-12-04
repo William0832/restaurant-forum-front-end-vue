@@ -105,8 +105,21 @@ const router = new VueRouter({
     }
   ]
 })
-router.beforeEach((to, from, next) => {
-  store.dispatch('fetchCurrentUser')
+router.beforeEach(async (to, from, next) => {
+  const token = localStorage.getItem('token')
+  let isAuthenticated = false
+  const pathsWithoutAuth = ['sign-in', 'sign-up']
+  if (token) {
+    isAuthenticated = await store.dispatch('fetchCurrentUser')
+  }
+  if (!isAuthenticated && !pathsWithoutAuth.includes(to.name)) {
+    next('/signin')
+    return
+  }
+  if (isAuthenticated && pathsWithoutAuth.includes(to.name)) {
+    next('/restaurants')
+    return
+  }
   next()
 })
 export default router
