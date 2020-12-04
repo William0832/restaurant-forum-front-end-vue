@@ -19,13 +19,22 @@ nav.navbar.navbar-expand-lg.fixed-top.navbar-dark.bg-dark
         router-link.text-white.mr-3(
           :to="`users/${currentUser.id}`"
         ) {{ currentUser.name || "使用者" }}您好
-        button.btn.btn-sm.btn-outline-success.my-2.my-sm-0(type="button") 登出
+        button.btn.btn-sm.btn-outline-success.my-2.my-sm-0(
+          @click="logout"
+          type="button"
+        ) 登出
 </template>
 <script>
 import { mapState } from 'vuex'
 export default {
   computed: {
     ...mapState(['currentUser', 'isAuthenticated'])
+  },
+  methods: {
+    logout () {
+      this.$store.commit('revokeAuthentication')
+      this.$router.push('/signin')
+    }
   }
 }
 </script>
