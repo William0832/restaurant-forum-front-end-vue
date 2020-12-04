@@ -33,16 +33,19 @@
           button.btn.btn-danger(
             v-if="isFollower"
             @click="toggleFollowing"
+            :disabled="isProcessing"
             type="button") 取消追蹤
           button.btn.btn-primary(
             v-else
+            :disabled="isProcessing"
             @click="toggleFollowing"
             type="button") 追蹤
-
 </template>
 
 <script>
 import { emptyImage } from '../utils/mixins'
+import usersAPI from '../apis/users'
+import { Toast } from '../utils/helpers'
 export default {
   mixins: [emptyImage],
   props: {
@@ -61,30 +64,43 @@ export default {
   },
   data () {
     return {
+      isProcessing: false,
       profile: this.initProfile
     }
   },
+  watch: {
+    initProfile (nv) {
+      this.profile = nv
+    }
+  },
   computed: {
-    // commendRestaurantsAmount () {
-    //   const result = new Set()
-    //   this.profile.Comments.forEach(e => {
-    //     result.add(e.Restaurant.id)
-    //   })
-    //   return result.size
-    // },
     isFollower () {
       return this.profile.Followers.map(e => e.id).includes(this.currentUser.id)
     }
   },
   methods: {
-    toggleFollowing () {
-      console.log('isFollower', this.isFollower)
-      if (this.isFollower) {
-        // TODO: delete follow by API
-        this.profile.Followers = this.profile.Followers.filter(e => e.id !== this.currentUser.id)
-      } else {
-        // TODO: add follow by API
-        this.profile.Followers.push({ id: this.currentUser.id })
+    async toggleFollowing () {
+      try {
+        this.isProcessing = true
+        const userId = this.profile.id
+        let res
+        if (this.isFollower) {
+          res = await usersAPI.deleteFollowing({ userId })
+          this.profile.Followers = this.profile.Followers.filter(e => e.id !== this.currentUser.id)
+        } else {
+          res = await usersAPI.addFollowing({ userId })
+          this.profile.Followers.push({ id: this.currentUser.id })
+        }
+        this.isProcessing = false
+        const { data } = res
+        if (data.status === 'error') throw new Error('data.msg')
+      } catch (err) {
+        console.error(err)
+        this.isProcessing = false
+        Toast.fire({
+          icon: 'error',
+          title: '無法更新追蹤，請稍後再試'
+        })
       }
     }
   }
