@@ -11,7 +11,7 @@
         :initial-restaurant="item"
       )
     RestaurantPagination(
-      :category-id="categoryId",
+      :category-id="categoryIdHandler",
       :current-page="currentPage",
       :total-page="totalPage.length"
     )
@@ -31,10 +31,15 @@ export default {
     return {
       restaurants: [],
       categories: [],
-      currentPage: undefined,
+      currentPage: null,
       totalPage: [],
-      categoryId: undefined,
+      categoryId: null,
       isLoading: true
+    }
+  },
+  computed: {
+    categoryIdHandler () {
+      return this.categoryId === '' ? 0 : this.categoryId
     }
   },
   methods: {
@@ -74,6 +79,7 @@ export default {
   beforeRouteUpdate (to, from, next) {
     this.isLoading = true
     const { page = '', categoryId = '' } = to.query
+    console.log('router-categortId', categoryId)
     this.fetchRestaurants({ page, categoryId })
     next()
   },

@@ -24,7 +24,7 @@ nav(aria-label="page navigation")
 <script>
 export default {
   props: {
-    categoryId: {
+    InitCategoryId: {
       type: Number,
       default: undefined
     },
@@ -38,6 +38,9 @@ export default {
     }
   },
   computed: {
+    categoryId () {
+      return this.InitCategoryId === 0 ? '' : this.InitCategoryId
+    },
     previousPage () {
       return this.currentPage <= 1 ? null : this.currentPage - 1
     },
