@@ -2,17 +2,20 @@
 .container.py-5
   NavTabs
   RestaurantsNavPills(:categories="categories")
-  .row
-    RestaurantCard(
-      v-for="item in restaurants"
-      :key="item.id"
-      :initial-restaurant="item"
+  Spinner(v-if="isLoading")
+  template(v-else)
+    .row
+      RestaurantCard(
+        v-for="item in restaurants",
+        :key="item.id",
+        :initial-restaurant="item"
+      )
+    RestaurantPagination(
+      :category-id="categoryId",
+      :current-page="currentPage",
+      :total-page="totalPage.length"
     )
-  RestaurantPagination(
-    :category-Id = "categoryId"
-    :current-page="currentPage"
-    :total-page="totalPage.length"
-  )
+    div(v-if="restaurants.length < 1") 此類別目前無餐廳資料
 </template>
 
 <script>
@@ -22,6 +25,7 @@ import RestaurantsNavPills from '../components/RestaurantsNavPills'
 import RestaurantPagination from '../components/RestaurantPagination.vue'
 import restaurantsAPI from '../apis/restaurants'
 import { Toast } from '../utils/helpers'
+import Spinner from '../components/Spinner'
 export default {
   data () {
     return {
@@ -29,7 +33,8 @@ export default {
       categories: [],
       currentPage: undefined,
       totalPage: [],
-      categoryId: undefined
+      categoryId: undefined,
+      isLoading: true
     }
   },
   methods: {
@@ -47,7 +52,10 @@ export default {
         this.totalPage = data.totalPage
         this.previousPage = data.prev
         this.nextPage = data.next
+        this.isLoading = false
       } catch (err) {
+        this.isLoading = false
+
         console.error('err:', err)
         Toast.fire({
           icon: 'error',
@@ -64,6 +72,7 @@ export default {
     })
   },
   beforeRouteUpdate (to, from, next) {
+    this.isLoading = true
     const { page = '', categoryId = '' } = to.query
     this.fetchRestaurants({ page, categoryId })
     next()
@@ -72,7 +81,8 @@ export default {
     NavTabs,
     RestaurantCard,
     RestaurantsNavPills,
-    RestaurantPagination
+    RestaurantPagination,
+    Spinner
   }
 }
 </script>

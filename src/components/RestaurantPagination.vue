@@ -3,22 +3,20 @@ nav(aria-label="page navigation")
   ul.pagination
     li.page-item(v-show="previousPage")
       router-link.page-link(
-        :to="{name:'restaurants',  query: { categoryId, page: previousPage }}"
+        :to="{ name: 'restaurants', query: { categoryId, page: previousPage } }"
       )
         span(aria-hidden="true") &laquo;
-
     li.page-item(
-      v-for="page in totalPage"
-      :key="page"
-      :class="{active: currentPage === page}"
+      v-for="page in totalPage",
+      :key="page",
+      :class="{ active: currentPage === page }"
     )
       router-link.page-link(
-        :to="{name: 'restaurants', query: { categoryId, page }}"
-      ) {{page}}
-
+        :to="{ name: 'restaurants', query: { categoryId, page } }"
+      ) {{ page }}
     li.page-item(v-show="nextPage")
       router-link.page-link(
-        :to="{name:'restaurants',  query: { categoryId, page: nextPage }}"
+        :to="{ name: 'restaurants', query: { categoryId, page: nextPage } }"
       )
         span(aria-hidden="true") &raquo;
 </template>
@@ -49,3 +47,33 @@ export default {
   }
 }
 </script>
+
+</script>
+
+<style scoped lang="sass">
+.pagination
+  display: flex
+  justify-content: center
+  margin-top: 20px
+
+.page-link
+  height: 37px
+  padding: 7px 20px
+  color: #bd2333
+
+  .page-item.active, &
+.page-item.active span
+  color: white
+  background-color: #bd2333
+  border-color: #bd2333
+  z-index: 1
+
+.page-item span
+  color: #bd2333
+
+a.page-link:hover,
+a.page-link:hover span
+  color: white
+  background-color: #bd2333
+  border-color: #bd2333
+</style>

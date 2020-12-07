@@ -1,46 +1,48 @@
 <template lang="pug">
 .row
   .col-md-12.mb-3
-    h1 {{restaurant.name}}
-    p.badge.badge-secondary.mt-1.mb-3 {{restaurant.categoryName}}
+    h1 {{ restaurant.name }}
+    p.badge.badge-secondary.mt-1.mb-3 {{ restaurant.categoryName }}
   .col-lg-4
     img(
-      :src="emptyImage(restaurant.image)"
+      :src="emptyImage(restaurant.image)",
       :alt="`image of ${restaurant.name}`"
     )
     .contact-info-wrap
       ul.list-unstyled
         li
           strong Opening Hour:
-          | {{restaurant.openingHours}}
+          | {{ restaurant.openingHours }}
         li
           strong Tel:
-          | {{restaurant.tel}}
+          | {{ restaurant.tel }}
         li
           strong Address:
-          |{{restaurant.address}}
+          | {{ restaurant.address }}
   .col-lg-8
     p {{ restaurant.description }}
-    router-link.btn.btn-primary.btn-border.mr-2(:to="`/restaurants/${restaurant.id}/dashboard`") Dashboard
+    router-link.btn.btn-primary.btn-border.mr-2(
+      :to="`/restaurants/${restaurant.id}/dashboard`"
+    ) Dashboard
     button.btn.btn-danger.btn-border.mr-2(
-      type="button"
-      v-if="restaurant.isFavorited"
-      @click.stop.prevent ="toggleFavorite"
+      type="button",
+      v-if="restaurant.isFavorited",
+      @click.stop.prevent="toggleFavorite"
     ) 移除最愛
     button.btn.btn-primary.btn-border.mr-2(
-      type="button"
-      v-else
-      @click.stop.prevent ="toggleFavorite"
+      type="button",
+      v-else,
+      @click.stop.prevent="toggleFavorite"
     ) 加到最愛
     button.btn.btn-danger.like.mr-2(
-      type="button"
-      v-if="restaurant.isLiked"
-      @click.stop.prevent ="toggleLik"
+      type="button",
+      v-if="restaurant.isLiked",
+      @click.stop.prevent="toggleLik"
     ) Unlike
     button.btn.btn-primary.like.mr-2(
-      type="button"
-      v-else
-      @click.stop.prevent ="toggleLik"
+      type="button",
+      v-else,
+      @click.stop.prevent="toggleLik"
     ) Like
 </template>
 
@@ -111,5 +113,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="sass">
+.col-lg-8 p,
+.contact-info-wrap li,
+.contact-info-wrap strong
+  font-family: serif
+  font-size: 17px
 </style>

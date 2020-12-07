@@ -3,18 +3,18 @@ div
   h2.my-4 所有評論：
   div
     blockquote.blockquote.mb-0(
-      v-for="(comment,index ) in restaurantComments"
+      v-for="(comment, index) in restaurantComments",
       :key="comment.id"
     )
       button.btn.btn-danger.float-right(
-        type="button"
-        v-if="currentUser.isAdmin"
+        type="button",
+        v-if="currentUser.isAdmin",
         @click.stop.prevent="deleteCommentHandler(comment.id)"
       ) Delete
       h3
-        router-link(to="#") {{comment.User.name}}
-      p {{comment.text}}
-      footer.blockquote-footer {{fromNow(comment)}}
+        router-link(to="#") {{ comment.User.name }}
+      p {{ comment.text }}
+      footer.blockquote-footer {{ fromNow(comment) }}
     hr
 </template>
 
@@ -54,5 +54,15 @@ export default {
 }
 </script>
 
-<style>
+<style lang="sass" scoped>
+h2.my-4
+  margin-bottom: 1rem !important
+  font-size: 18px
+
+h3
+  margin-bottom: 3px
+  line-height: 1.3
+
+.blockquote-footer
+  font-size: 12.5px
 </style>

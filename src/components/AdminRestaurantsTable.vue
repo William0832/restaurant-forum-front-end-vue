@@ -13,13 +13,13 @@ table.table
       td {{ restaurant.name }}
       td.d-flex.justify-content-between
         router-link.btn.btn-link(
-          :to="{ name:'admin-restaurant', params:{ id: restaurant.id } }"
+          :to="{ name: 'admin-restaurant', params: { id: restaurant.id } }"
         ) Show
         router-link.btn.btn-link(
           :to="`/admin/restaurants/${restaurant.id}/edit`"
         ) Edit
         button.btn.btn-link(
-          type="button"
+          type="button",
           @click.stop.prevent="deleteRestaurant(restaurant.id)"
         ) Delete
 </template>
@@ -30,7 +30,13 @@ import adminAPI from '../apis/admin'
 export default {
   data () {
     return {
-      restaurants: []
+      restaurants: [],
+      isLoading: true
+    }
+  },
+  watch: {
+    isLoading (nv) {
+      this.$emit('loading', nv)
     }
   },
   methods: {
@@ -38,7 +44,9 @@ export default {
       try {
         const { data } = await adminAPI.restaurants.get()
         this.restaurants = data.restaurants
+        this.isLoading = false
       } catch (err) {
+        this.isLoading = false
         console.error(err)
         Toast.fire({
           icon: 'error',

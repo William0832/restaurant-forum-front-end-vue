@@ -2,17 +2,10 @@
 form(@submit.stop.prevent="submitHandler")
   .form-group.mb-4
     label(for="text") 留下評論：
-    textarea.form-control(
-      rows="3"
-      name="text"
-      v-model.trim="text"
-    )
+    textarea.form-control(rows="3", name="text", v-model.trim="text")
     .d-flex.align-items-center.justify-content-between
       button.btn.btn-link(type="button", @click="$router.back()") 回上一頁
-      button.btn.btn-primary.mr-0(
-        :disabled="isProcessing"
-        type="submit"
-      ) Submit
+      button.btn.btn-primary.mr-0(:disabled="isProcessing", type="submit") Submit
 </template>
 
 <script>
@@ -64,3 +57,7 @@ export default {
   }
 }
 </script>
+<style lang="sass" scoped>
+.form-group
+  margin: 21px 0 8px
+</style>

@@ -1,14 +1,12 @@
 <template lang="pug">
 .container.py-5
   NavTabs
-  h1.mt-5 美食達人
-  hr
-  .row.text-center
-    UserCard(
-      v-for="user in topUsers"
-      :key="user.id"
-      :initialUser="user"
-    )
+  Spinner(v-if="isLoading")
+  template(v-else)
+    h1.mt-5 美食達人
+    hr
+    .row.text-center
+      UserCard(v-for="user in topUsers", :key="user.id", :initialUser="user")
 </template>
 
 <script>
@@ -16,11 +14,12 @@ import NavTabs from '../components/NavTabs.vue'
 import UserCard from '../components/UserCard'
 import usersAPI from '../apis/users'
 import { Toast } from '../utils/helpers'
-
+import Spinner from '../components/Spinner'
 export default {
   data () {
     return {
-      users: []
+      users: [],
+      isLoading: true
     }
   },
   computed: {
@@ -39,7 +38,10 @@ export default {
           followerCount: e.FollowerCount,
           isFollowed: e.isFollowed
         }))
+        this.isLoading = false
       } catch (err) {
+        this.isLoading = false
+
         console.log(err)
         Toast.fire({
           icon: 'error',
@@ -53,7 +55,8 @@ export default {
   },
   components: {
     NavTabs,
-    UserCard
+    UserCard,
+    Spinner
   }
 }
 </script>

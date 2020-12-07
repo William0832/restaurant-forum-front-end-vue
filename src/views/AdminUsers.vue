@@ -1,7 +1,8 @@
 <template lang="pug">
 .container.py-5
   AdminNav
-  table.table
+  Spinner(v-if="isLoading")
+  table.table(v-else)
     thead.thead-dark
       tr
         th(scope="col") #
@@ -9,19 +10,16 @@
         th(scope="col") Role
         th(scope="col", width="140") Action
     tbody
-      tr(
-          v-for="user in users"
-          :key="user.id"
-        )
-        th(scope="row") {{user.id}}
-        td {{user.email}}
+      tr(v-for="user in users", :key="user.id")
+        th(scope="row") {{ user.id }}
+        td {{ user.email }}
         td
           span(v-show="user.isAdmin") admin
           span(v-show="!user.isAdmin") user
         td
           button.btn.btn-link(
-            @click="toggleRole(user.id)"
-            type="button"
+            @click="toggleRole(user.id)",
+            type="button",
             :disabled="user.id === currentUser.id"
           )
             span(v-show="user.isAdmin") Set as user
@@ -33,11 +31,14 @@ import AdminNav from '../components/AdminNav'
 import { Toast } from '../utils/helpers.js'
 import adminAPI from '../apis/admin'
 import { mapState } from 'vuex'
+import Spinner from '../components/Spinner'
+
 export default {
-  components: { AdminNav },
+  components: { AdminNav, Spinner },
   data () {
     return {
-      users: []
+      users: [],
+      isLoading: true
     }
   },
   computed: {
@@ -48,7 +49,9 @@ export default {
       try {
         const { data } = await adminAPI.users.get()
         this.users = data.users
+        this.isLoading = false
       } catch (err) {
+        this.isLoading = false
         console.error(err)
         Toast.fire({
           icon: 'error',

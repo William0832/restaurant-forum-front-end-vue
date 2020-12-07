@@ -1,10 +1,12 @@
 <template lang="pug">
-  .container.py-5
-    NavTabs
+.container.py-5
+  NavTabs
+  Spinner(v-if="isLoading")
+  template(v-else)
     h1.mt-5 人氣餐廳
     hr
     .card.mb-3(
-      style="max-width: 540px;margin: auto;"
+      style="max-width: 540px; margin: auto",
       v-for="item in restaurants"
     )
       .row.no-gutters
@@ -13,18 +15,18 @@
             img.card-img(:src="emptyImage(item.image)")
         .col-md-8
           .card-body
-            h5.card-title {{item.name}}
-            span.badge.badge-secondary 收藏數：{{item.FavoriteCount}}
-            p.card-text {{item.description}}
+            h5.card-title {{ item.name }}
+            span.badge.badge-secondary 收藏數：{{ item.FavoriteCount }}
+            p.card-text {{ item.description }}
             router-link.btn.btn-primary.mr-2(:to="`/restaurants/${item.id}`") Show
             button.btn.btn-danger.mr-2(
-              type="button"
-              v-if="item.isFavorited"
+              type="button",
+              v-if="item.isFavorited",
               @click.prevent.stop="toggleFavorite(item.id)"
             ) 移除最愛
             button.btn.btn-primary(
-              type="button"
-              v-else
+              type="button",
+              v-else,
               @click.prevent.stop="toggleFavorite(item.id)"
             ) 加到最愛
 </template>
@@ -35,26 +37,30 @@ import { emptyImage } from '../utils/mixins'
 import { Toast } from '../utils/helpers'
 import restaurantsAPI from '../apis/restaurants'
 import usersAPI from '../apis/users'
+import Spinner from '../components/Spinner'
 export default {
   mixins: [emptyImage],
   data () {
     return {
-      restaurants: []
+      restaurants: [],
+      isLoading: true
     }
   },
   components: {
-    NavTabs
+    NavTabs, Spinner
   },
   methods: {
     async fetchRestaurants () {
       try {
         const { data } = await restaurantsAPI.getTopRestaurants()
         this.restaurants = data.restaurants
+        this.isLoading = false
       } catch (err) {
+        this.isLoading = false
         console.error(err)
         Toast.fire({
           icon: 'error',
-          title: '無法取得 TOP USER ， 請稍後再試'
+          title: '無法取得餐廳資料 ， 請稍後再試'
         })
       }
     },

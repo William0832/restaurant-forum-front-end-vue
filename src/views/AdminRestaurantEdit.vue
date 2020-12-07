@@ -1,8 +1,11 @@
 <template lang="pug">
 .container.py-5
+  Spinner(v-if="isLoading")
+
   AdminRestaurantForm(
-    @after-submit="afterSubmitHandler"
-    :initial-restaurant="restaurant"
+    v-else,
+    @after-submit="afterSubmitHandler",
+    :initial-restaurant="restaurant",
     :is-processing="isProcessing"
   )
 </template>
@@ -11,14 +14,15 @@
 import AdminRestaurantForm from '../components/AdminRestaurantForm.vue'
 import adminAPI from '../apis/admin'
 import { Toast } from '../utils/helpers'
-
+import Spinner from '../components/Spinner'
 export default {
   components: {
-    AdminRestaurantForm
+    AdminRestaurantForm, Spinner
   },
   data () {
     return {
       isProcessing: false,
+      isLoading: true,
       restaurant: {
         id: -1,
         name: '',
@@ -52,7 +56,9 @@ export default {
           image: restaurant.image,
           openingHours: restaurant.opening_hours
         }
+        this.isLoading = false
       } catch (err) {
+        this.isLoading = false
         console.log(err)
         Toast.fire({
           icon: 'error',

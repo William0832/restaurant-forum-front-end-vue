@@ -1,7 +1,7 @@
 <template lang="pug">
 ul.nav.nav-tabs.mb-4
-  li.nav-item(v-for='tab in tabs', :key='tab.id')
-    router-link.nav-link(:to='tab.path') {{ tab.title }}
+  li.nav-item(v-for="tab in tabs", :key="tab.id")
+    router-link.nav-link(:to="tab.path") {{ tab.title }}
 </template>
 
 <script>
@@ -36,3 +36,19 @@ export default {
   }
 }
 </script>
+
+<style  lang="sass" scoped>
+.nav-tabs
+  border-bottom: 1px solid #bd2333
+
+  & .nav-link:focus,
+
+  & .nav-link:hover,
+
+  & .nav-item.show .nav-link,
+
+  & .nav-link.active
+    border-color: #bd2333
+    background-color: #bd2333
+    color: white
+</style>

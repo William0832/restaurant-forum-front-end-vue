@@ -1,84 +1,70 @@
 <template lang="pug">
-  form(
-    v-show="!isLoading"
-    @submit.stop.prevent="submitHandler"
+form(v-show="!isLoading", @submit.stop.prevent="submitHandler")
+  .form-group
+    label(for="name") Name
+    input#name.form-control(
+      type="text",
+      name="name",
+      placeholder="Enter name",
+      v-model="restaurant.name",
+      required
     )
-    .form-group
-      label(for="name") Name
-      input.form-control(
-        id="name"
-        type="text"
-        name="name"
-        placeholder="Enter name"
-        v-model="restaurant.name"
-        required
-      )
-    .form-group
-      label(for="categoryId") Category
-      select.form-control(
-        id="categoryId"
-        name="categoryId"
-        v-model="restaurant.categoryId"
-        required
-      )
-        option(
-          value=""
-          selected
-          disabled
-        ) --請選擇--
-        option(
-          v-for="item in categories"
-          :key="item.id"
-          :value="item.id"
-        ) {{item.name}}
-    .form-group
-      label(for="tel") Tel
-      input#tel.form-control(
-        v-model="restaurant.tel"
-        type="text"
-        name="tel"
-        placeholder="Enter telephone number"
-      )
-    .form-group
-      label(for="address") Address
-      input#address.form-control(
-        v-model="restaurant.address"
-        type="text"
-        placeholder="Enter address"
-        name="address"
-      )
-    .form-group
-      label(for="opening-hours") Opening Hours
-      input#opening-hours.form-control(
-        v-model="restaurant.openingHours"
-        type="time"
-        name="opening_hours"
-      )
-    .form-group
-      label(for="description") Description
-      textarea#description.form-control(
-        v-model="restaurant.description"
-        rows="3"
-        name="description"
-      )
-    .form-group
-      label(for="image") Image
-      img.d-block.img-thumbnail.mb-3(
-        v-if="restaurant.image"
-        :src="restaurant.image"
-        width="200"
-        height="200"
-      )
-      input#image.form-control-file(
-        type="file"
-        name="image"
-        accept="image/*"
-        @change="fileChangeHandler"
-      )
-    button.btn.btn-primary(
-      :disabled="isProcessing"
-      type="submit"
-    ) {{ isProcessing ? '處理中' : '送出' }}
+  .form-group
+    label(for="categoryId") Category
+    select#categoryId.form-control(
+      name="categoryId",
+      v-model="restaurant.categoryId",
+      required
+    )
+      option(value="", selected, disabled) --請選擇--
+      option(v-for="item in categories", :key="item.id", :value="item.id") {{ item.name }}
+  .form-group
+    label(for="tel") Tel
+    input#tel.form-control(
+      v-model="restaurant.tel",
+      type="text",
+      name="tel",
+      placeholder="Enter telephone number"
+    )
+  .form-group
+    label(for="address") Address
+    input#address.form-control(
+      v-model="restaurant.address",
+      type="text",
+      placeholder="Enter address",
+      name="address"
+    )
+  .form-group
+    label(for="opening-hours") Opening Hours
+    input#opening-hours.form-control(
+      v-model="restaurant.openingHours",
+      type="time",
+      name="opening_hours"
+    )
+  .form-group
+    label(for="description") Description
+    textarea#description.form-control(
+      v-model="restaurant.description",
+      rows="3",
+      name="description"
+    )
+  .form-group
+    label(for="image") Image
+    img.d-block.img-thumbnail.mb-3(
+      v-if="restaurant.image",
+      :src="restaurant.image",
+      width="200",
+      height="200"
+    )
+    input#image.form-control-file(
+      type="file",
+      name="image",
+      accept="image/*",
+      @change="fileChangeHandler"
+    )
+  button.btn.btn-primary(:disabled="isProcessing", type="submit") {{ isProcessing ? '處理中' : '送出' }}
+  br
+  button.mt-3.btn.btn-link(type="button", @click="$router.back()") 回上一頁
 </template>
 <script>
 import { fileChangeHandler } from '../utils/mixins'

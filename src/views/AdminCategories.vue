@@ -1,70 +1,72 @@
 <template lang="pug">
 .container.py-5
   AdminNav
-  form.my-4
-    .form-row
-      .col-auto
-        input.form-control(
-          v-model.trim='newCategoryName'
-          type="text"
-          placeholder="新增餐廳類別..."
-        )
-      .col-auto
-        button.btn.btn-primary(
-          :disabled ="isProcessing"
-          type="button"
-          @click.stop.prevent="createCategory"
-        ) 新增
-  table.table
-    thead.thead-dark
-      tr
-        th(scope="col", width="60") #
-        th(scope="col") Category Name
-        th(scope="col", width="210") Action
-    tbody
-      tr(v-for="category in categories", :key="category.id")
-        th(scope="row") {{ category.id }}
-        td.position-relative
-          .category-name(
-            v-show="!category.isEditing"
-            ) {{ category.name }}
+  Spinner(v-if="isLoading")
+  template(v-else)
+    form.my-4
+      .form-row
+        .col-auto
           input.form-control(
-            v-show="category.isEditing"
-            v-model="category.name"
-            type="text"
+            v-model.trim="newCategoryName",
+            type="text",
+            placeholder="新增餐廳類別..."
           )
-          span.cancel(
-            v-show="category.isEditing"
-            @click.stop.prevent="cancelEditing(category.id)"
-          ) ✕
-        td.d-flex.justify-content-between
-          button.btn.btn-link.mr-2(
-            v-show="!category.isEditing"
-            @click.stop.prevent="toggleIsEditing(category.id)"
-            type="button"
-          ) Edit
-          button.btn.btn-link.mr-2(
-            v-show="category.isEditing"
-            @click.stop.prevent="updateCategory(category.id, category.name)"
-            type="button"
-          ) Save
-          button.btn.btn-link.mr-2(
-            :disabled="isProcessing"
-            @click.stop.prevent="deleteCategory(category.id)"
-            type="button"
-          )  Delete
+        .col-auto
+          button.btn.btn-primary(
+            :disabled="isProcessing",
+            type="button",
+            @click.stop.prevent="createCategory"
+          ) 新增
+    table.table
+      thead.thead-dark
+        tr
+          th(scope="col", width="60") #
+          th(scope="col") Category Name
+          th(scope="col", width="210") Action
+      tbody
+        tr(v-for="category in categories", :key="category.id")
+          th(scope="row") {{ category.id }}
+          td.position-relative
+            .category-name(v-show="!category.isEditing") {{ category.name }}
+            input.form-control(
+              v-show="category.isEditing",
+              v-model="category.name",
+              type="text"
+            )
+            span.cancel(
+              v-show="category.isEditing",
+              @click.stop.prevent="cancelEditing(category.id)"
+            ) ✕
+          td.d-flex.justify-content-between
+            button.btn.btn-link.mr-2(
+              v-show="!category.isEditing",
+              @click.stop.prevent="toggleIsEditing(category.id)",
+              type="button"
+            ) Edit
+            button.btn.btn-link.mr-2(
+              v-show="category.isEditing",
+              @click.stop.prevent="updateCategory(category.id, category.name)",
+              type="button"
+            ) Save
+            button.btn.btn-link.mr-2(
+              :disabled="isProcessing",
+              @click.stop.prevent="deleteCategory(category.id)",
+              type="button"
+            ) Delete
 </template>
 
 <script>
 import AdminNav from '@/components/AdminNav'
 import adminAPI from '../apis/admin'
 import { Toast } from '../utils/helpers'
+import Spinner from '../components/Spinner'
 export default {
   components: {
-    AdminNav
+    AdminNav, Spinner
   },
   data () {
     return {
+      isLoading: true,
       isProcessing: false,
       targetId: undefined,
       newCategoryName: '',
@@ -83,7 +85,10 @@ export default {
           nameCached: '',
           isEditing: false
         }))
+        this.isLoading = false
       } catch (err) {
+        this.isLoading = false
+
         console.error(err)
         Toast.fire({
           icon: 'error',

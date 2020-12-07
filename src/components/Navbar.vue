@@ -13,14 +13,13 @@ nav.navbar.navbar-expand-lg.fixed-top.navbar-dark.bg-dark
   #navbarSupportedContent.navbar-collapse.collapse
     .ml-auto.d-flex.align-items-center
       router-link.text-white.mr-3(
-        :to="{ name: 'admin-restaurants' }"
-        v-if="currentUser.isAdmin") 管理員後台
+        :to="{ name: 'admin-restaurants' }",
+        v-if="currentUser.isAdmin"
+      ) 管理員後台
       template(v-if="isAuthenticated")
-        router-link.text-white.mr-3(
-          :to="`users/${currentUser.id}`"
-        ) {{ currentUser.name || "使用者" }}您好
+        router-link.text-white.mr-3(:to="`users/${currentUser.id}`") {{ currentUser.name || '使用者' }}您好
         button.btn.btn-sm.btn-outline-success.my-2.my-sm-0(
-          @click="logout"
+          @click="logout",
           type="button"
         ) 登出
 </template>
