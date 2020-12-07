@@ -8,7 +8,8 @@
       )
     .card-body
       p.card-title {{ restaurant.name }}
-      span.badge.badge-secondary {{ restaurant.Category.name }}
+      span.badge.badge-secondary(v-if="restaurant.Category") {{ restaurant.Category.name }}
+      span.badge.badge-secondary(v-else) 未分類
       p.card-text.text-truncate {{ restaurant.description }}
     .card-footer
       button.btn.btn-danger.btn-border.favorite.mr-2(
