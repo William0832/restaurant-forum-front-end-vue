@@ -64,7 +64,7 @@ export default {
   padding: 7px 20px
   color: #bd2333
 
-  .page-item.active, &
+.page-item.active .page-link,
 .page-item.active span
   color: white
   background-color: #bd2333
